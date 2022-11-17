@@ -1,8 +1,9 @@
 const router = require("express").Router();
-const mongoose = require("mongoose");
+const Product = require("../Model/Product");
 
 router.get("/", async (req, res) => {
-  res.json("get all product");
+  const product = await Product.find();
+  res.status(200).json(product);
 });
 
 router.post("/", async (req, res) => {
