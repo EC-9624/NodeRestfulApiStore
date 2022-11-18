@@ -6,17 +6,12 @@ router.get("/", async (req, res) => {
     const product = await Product.find();
     const p = product.map((p) => {
       return {
-        name: p.name,
-        price: p.price,
-        _id: p._id,
-        request: { method: "GET", url: "http://localhost:3000/products" },
+        method: "GET",
+        url: "http://localhost:3000/products",
+        body: { name: p.name, price: p.price, _id: p._id },
       };
     });
-
-    res.status(200).json({
-      message: "Retrieved all Product",
-      result: p,
-    });
+    res.status(200).json(p);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -31,10 +26,10 @@ router.post("/", async (req, res) => {
     newProduct.save(newProduct);
     res.status(201).json({
       message: "post a product",
-      result: {
-        name: newProduct.name,
-        price: newProduct.price,
-        request: { method: "POST", url: "http://localhost:3000/products" },
+      request: {
+        method: "POST",
+        url: "http://localhost:3000/products",
+        body: { name: newProduct.name, price: newProduct.price },
       },
     });
   } catch (err) {
@@ -48,14 +43,10 @@ router.get("/:productId", async (req, res) => {
     const product = await Product.findById(productId);
     res.json({
       message: "get product by ID",
-      result: {
-        name: product.name,
-        price: product.price,
-        _id: product._id,
-        request: {
-          method: "GET",
-          url: "http://localhost:3000/products/" + productId,
-        },
+      request: {
+        method: "GET",
+        url: "http://localhost:3000/products/" + productId,
+        body: { name: product.name, price: product.price, _id: product._id },
       },
     });
   } catch (err) {
@@ -73,15 +64,16 @@ router.patch("/:productId", async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(productId, update, {
       returnDocument: "after",
     });
+
     res.json({
       message: "Edit a product",
-      result: {
-        name: updatedProduct.name,
-        price: updatedProduct.price,
-        _id: updatedProduct._id,
-        request: {
-          method: "PATCH",
-          url: "http://localhost:3000/products/" + productId,
+      request: {
+        method: "PATCH",
+        url: "http://localhost:3000/products/" + productId,
+        body: {
+          name: updatedProduct.name,
+          price: updatedProduct.price,
+          _id: updatedProduct._id,
         },
       },
     });
@@ -96,13 +88,13 @@ router.delete("/:productId", async (req, res) => {
     const removedProduct = await Product.findByIdAndRemove(productId);
     res.json({
       message: "Deleted Product",
-      result: {
-        name: removedProduct.name,
-        price: removedProduct.price,
-        _id: removedProduct._id,
-        request: {
-          method: "DELETE",
-          url: "http://localhost:3000/products/" + productId,
+      request: {
+        method: "DELETE",
+        url: "http://localhost:3000/products/" + productId,
+        body: {
+          name: removedProduct.name,
+          price: removedProduct.price,
+          _id: removedProduct._id,
         },
       },
     });
