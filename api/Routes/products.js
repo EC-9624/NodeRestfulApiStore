@@ -3,7 +3,7 @@ const Product = require("../Model/Product");
 
 router.get("/", async (req, res) => {
   const product = await Product.find();
-  res.status(200).json(product);
+  res.status(200).json({ message: "Retrived all Product", result: product });
 });
 
 router.post("/", async (req, res) => {
