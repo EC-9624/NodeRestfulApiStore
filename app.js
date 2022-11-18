@@ -4,7 +4,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const productRutes = require("./api/Routes/products");
+const productRoutes = require("./api/Routes/products");
+const orderRoutes = require("./api/Routes/orders");
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -13,7 +14,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 
-app.use("/products", productRutes);
+app.use("/products", productRoutes);
+app.use("/orders", orderRoutes);
 
 mongoose
   .connect(process.env.MONGO_URL)
