@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
       name: req.body.name,
       price: req.body.price,
     });
-    newProduct.save(newProduct);
+    await newProduct.save();
     res.status(201).json({
       message: "post a product",
       request: {
