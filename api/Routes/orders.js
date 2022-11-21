@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Order = require("../Model/Order");
+const Product = require("../Model/Product");
 
 router.get("/", async (req, res) => {
   try {
@@ -11,14 +12,23 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    const productId = req.body.productId;
+
+    const product = await Product.findById(productId).catch((err) => {
+      res.status(404).json(err);
+    });
+
     const order = new Order({
-      product: req.body.productId,
+      product: product._id,
       quantity: req.body.quantity,
     });
+
     await order.save();
+
     res.status(201).json(order);
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).json("Something went Wrong");
   }
 });
 
@@ -27,14 +37,7 @@ router.get("/:orderId", async (req, res) => {
     const orderId = req.params.orderId;
     res.status(200).json(await Order.findById(orderId));
   } catch (err) {
-    res.status(404).json(err);
-  }
-});
-
-router.patch("/:orderId", (req, res) => {
-  try {
-  } catch (err) {
-    res.status(500).json(err);
+    res.status(404);
   }
 });
 
