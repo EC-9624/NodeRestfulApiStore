@@ -7,8 +7,8 @@ router.get("/", async (req, res) => {
     const p = product.map((p) => {
       return {
         method: "GET",
-        url: "http://localhost:3000/products",
-        body: { name: p.name, price: p.price, _id: p._id },
+        url: "http://localhost:3000/products/" + p._id,
+        body: { name: p.name, price: p.price },
       };
     });
     res.status(200).json(p);
@@ -42,11 +42,11 @@ router.get("/:productId", async (req, res) => {
     const productId = req.params.productId;
     const product = await Product.findById(productId);
     res.json({
-      message: "get product by ID",
       request: {
+        message: "get product by ID",
         method: "GET",
         url: "http://localhost:3000/products/" + productId,
-        body: { name: product.name, price: product.price, _id: product._id },
+        body: { name: product.name, price: product.price },
       },
     });
   } catch (err) {
@@ -66,8 +66,8 @@ router.patch("/:productId", async (req, res) => {
     });
 
     res.json({
-      message: "Edit a product",
       request: {
+        message: "Edit a product",
         method: "PATCH",
         url: "http://localhost:3000/products/" + productId,
         body: {
@@ -87,14 +87,13 @@ router.delete("/:productId", async (req, res) => {
     const productId = req.params.productId;
     const removedProduct = await Product.findByIdAndRemove(productId);
     res.json({
-      message: "Deleted Product",
       request: {
+        message: "Deleted Product",
         method: "DELETE",
         url: "http://localhost:3000/products/" + productId,
         body: {
           name: removedProduct.name,
           price: removedProduct.price,
-          _id: removedProduct._id,
         },
       },
     });
