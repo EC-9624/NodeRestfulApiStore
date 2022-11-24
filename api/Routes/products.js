@@ -13,7 +13,9 @@ router.get("/", async (req, res) => {
     });
     res.status(200).json(p);
   } catch (err) {
-    res.status(500).json(err);
+    res
+      .status(500)
+      .json({ message: "Songthing went Wrong", error: err.message });
   }
 });
 
@@ -33,7 +35,9 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json(err);
+    res
+      .status(500)
+      .json({ message: "Something went Wrong", error: err.message });
   }
 });
 
@@ -45,12 +49,14 @@ router.get("/:productId", async (req, res) => {
       request: {
         message: "get product by ID",
         method: "GET",
-        url: "http://localhost:3000/products/" + productId,
+        url: "http://localhost:3000/products/",
         body: { name: product.name, price: product.price },
       },
     });
   } catch (err) {
-    res.status(404).json(err);
+    res
+      .status(500)
+      .json({ message: "Something went Wrong", error: err.message });
   }
 });
 
@@ -78,7 +84,9 @@ router.patch("/:productId", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(404).json(err);
+    res
+      .status(500)
+      .json({ message: "Songthing went Wrong", error: err.message });
   }
 });
 
@@ -98,7 +106,9 @@ router.delete("/:productId", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json(err);
+    res
+      .status(500)
+      .json({ message: "Something went Wrong", error: err.message });
   }
 });
 

@@ -14,16 +14,16 @@ router.get("/", async (req, res) => {
     });
     res.status(200).send(doc);
   } catch (err) {
-    res.status(500).json(err);
+    res
+      .status(500)
+      .json({ message: "Something went Wrong", error: err.message });
   }
 });
 
 router.post("/", async (req, res) => {
   try {
     const productId = req.body.productId;
-    const product = await Product.findById(productId).catch((err) => {
-      res.status(404).json({ message: "Product not Found", erorr: err });
-    });
+    const product = await Product.findById(productId);
 
     const order = new Order({
       product: product._id,
@@ -42,9 +42,9 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (err) {
-    let error = null ? err : "Product not Found";
-
-    res.status(500).json({ message: "Something went Wrong", error: error });
+    res
+      .status(500)
+      .json({ message: "Something went Wrong", error: err.message });
   }
 });
 
@@ -62,7 +62,9 @@ router.get("/:orderId", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(404);
+    res
+      .status(500)
+      .json({ message: "Something Went Wrong", error: err.message });
   }
 });
 
@@ -71,9 +73,12 @@ router.delete("/:orderId", async (req, res) => {
     const orderId = req.params.orderId;
     const removed = await Order.findByIdAndRemove(orderId);
     if (removed == null) res.status(404).json({ message: "Order not Found" });
+
     res.status(200).json({ message: "Removed Order", order: removed });
   } catch (err) {
-    res.status(500).json(err);
+    res
+      .status(500)
+      .json({ message: "Something went Wrong", error: err.message });
   }
 });
 
