@@ -4,7 +4,8 @@ const Product = require("../Model/Product");
 
 router.get("/", async (req, res) => {
   try {
-    const result = await Order.find();
+    const result = await Order.find().populate("product", "name price");
+
     const doc = result.map((doc) => {
       return {
         method: "GET",
@@ -51,7 +52,11 @@ router.post("/", async (req, res) => {
 router.get("/:orderId", async (req, res) => {
   try {
     const orderId = req.params.orderId;
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate(
+      "product",
+      "name price"
+    );
+
     res.status(200).json({
       Method: "GET",
       url: "http://localhost:3000/orders",
