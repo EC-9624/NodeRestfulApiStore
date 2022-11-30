@@ -32,7 +32,6 @@ router.post("/", async (req, res) => {
     });
 
     const newOrder = await order.save();
-
     res.status(201).json({
       Method: "POST",
       url: "http://localhost:3000/orders",

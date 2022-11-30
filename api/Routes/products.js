@@ -1,5 +1,17 @@
 const router = require("express").Router();
 const Product = require("../Model/Product");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   try {
@@ -19,13 +31,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", upload.single("productImage"), async (req, res) => {
   try {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
     });
     await newProduct.save();
+    console.log(req.file);
     res.status(201).json({
       message: "post a product",
       request: {
