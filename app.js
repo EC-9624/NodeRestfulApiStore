@@ -16,6 +16,7 @@ app.use(cors());
 
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use(express.static("uploads"));
 
 mongoose
   .connect(process.env.MONGO_URL)
