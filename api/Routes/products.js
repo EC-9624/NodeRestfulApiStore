@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
       return {
         method: "GET",
         url: "http://localhost:3000/products/" + p._id,
-        body: { name: p.name, price: p.price },
+        body: { name: p.name, price: p.price, productImage: p.productImage },
       };
     });
     res.status(200).json(p);
@@ -36,6 +36,7 @@ router.post("/", upload.single("productImage"), async (req, res) => {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
+      productImage: req.file.path,
     });
     await newProduct.save();
     console.log(req.file);
@@ -44,7 +45,11 @@ router.post("/", upload.single("productImage"), async (req, res) => {
       request: {
         method: "POST",
         url: "http://localhost:3000/products",
-        body: { name: newProduct.name, price: newProduct.price },
+        body: {
+          name: newProduct.name,
+          price: newProduct.price,
+          productImage: newProduct.productImage,
+        },
       },
     });
   } catch (err) {
@@ -63,7 +68,11 @@ router.get("/:productId", async (req, res) => {
         message: "get product by ID",
         method: "GET",
         url: "http://localhost:3000/products/",
-        body: { name: product.name, price: product.price },
+        body: {
+          name: product.name,
+          price: product.price,
+          productImage: product.productImage,
+        },
       },
     });
   } catch (err) {
@@ -79,6 +88,7 @@ router.patch("/:productId", async (req, res) => {
     const update = {
       name: req.body.name,
       price: req.body.price,
+      productImage: req.file,
     };
     const updatedProduct = await Product.findByIdAndUpdate(productId, update, {
       returnDocument: "after",
@@ -92,6 +102,7 @@ router.patch("/:productId", async (req, res) => {
         body: {
           name: updatedProduct.name,
           price: updatedProduct.price,
+          productImage: updatedProduct.productImage,
           _id: updatedProduct._id,
         },
       },
@@ -115,6 +126,7 @@ router.delete("/:productId", async (req, res) => {
         body: {
           name: removedProduct.name,
           price: removedProduct.price,
+          productImage: removedProduct.productImage,
         },
       },
     });
