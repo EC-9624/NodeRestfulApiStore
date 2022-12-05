@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const productRoutes = require("./api/Routes/products");
 const orderRoutes = require("./api/Routes/orders");
+const userRoutes = require("./api/Routes/users");
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use("/users", userRoutes);
 app.use(express.static("uploads"));
 
 mongoose
