@@ -4,29 +4,14 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/");
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
+    cb(null, new Date().toISOString().replaceAll(":", "-") + file.originalname);
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  //reject file
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, false);
-  } else {
-    cb(null, true);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5,
-  },
-  fileFilter: fileFilter,
-});
+const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   try {
@@ -50,15 +35,17 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", upload.single("productImage"), async (req, res) => {
+router.post("/", upload.single("productImage"), (req, res) => {
+  console.log(req.file);
   try {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
-      productImage: req.file.path,
+      productImage: req.file.filename,
     });
-    await newProduct.save();
-    console.log(req.file);
+
+    newProduct.save();
+
     res.status(201).json({
       message: "post a product",
       request: {
