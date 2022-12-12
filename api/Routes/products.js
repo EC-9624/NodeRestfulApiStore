@@ -49,7 +49,7 @@ router.post("/", upload.single("productImage"), (req, res) => {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
-      productImage: req.file.filename,
+      productImage: "http://localhost:3000/" + req.file.filename,
     });
 
     newProduct.save();
