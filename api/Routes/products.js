@@ -35,7 +35,11 @@ router.get("/", async (req, res) => {
       return {
         method: "GET",
         url: "http://localhost:3000/products/" + p._id,
-        body: { name: p.name, price: p.price, productImage: p.productImage },
+        body: {
+          name: p.name,
+          price: p.price,
+          productImage: p.productImage,
+        },
       };
     });
     res.status(200).json(p);
